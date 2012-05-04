@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require 'TextAnywhere_ruby'
+puts TextAnywhere_ruby.hi(ARGV[0])
