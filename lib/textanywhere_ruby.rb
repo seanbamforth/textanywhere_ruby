@@ -142,7 +142,9 @@ class TextAnywhere_ruby
     @options[:externallogin] = username 
     @options[:password] = password
     @options[:originator] = originator if originator
+    
     @options.merge(options)
+    @remember_originator = @options[:originator] 
   end
 
   def send(destinations,body,clientmessagereference="ref",options = {})
@@ -230,6 +232,7 @@ class TextAnywhere_ruby
       url = url + param.to_s + "=" + URI::encode(@options[param].to_s)
     end 
     response = get_html_content(@start_url + "?" + url)
+    puts url 
     return response
   end
 
@@ -260,6 +263,12 @@ class TextAnywhere_ruby
     return response
   end
 
+  def restore_originator
+    @options[:originator] = @remember_originator
+    @options[:replydata] = ""
+    @options[:replymethodid] = 1
+  end
+
   #Test service is working. All OK 
   def test_service
     @options[:method] = 'testservice'
@@ -275,6 +284,7 @@ class TextAnywhere_ruby
     @options[:body] = body
     @options.merge(options)
     response = ta_response(send_params)
+
     return response
   end
 
@@ -334,6 +344,56 @@ class TextAnywhere_ruby
     @options[:keyword] = keyword
     response = ta_response(subscriber_params)
     return response
+  end
+
+  def method_for(method)
+    reply = {
+      :no_reply=>1,
+      :reply_to_email=>2,
+      :reply_to_web_service=>3,
+      :send_phone_no=>4,
+      :reply_to_url=>5,
+      :no_reply_use_shortcode=>7
+    }[method]
+
+    reply = 1 unless reply
+    return reply
+  end
+
+  def no_reply_originator(orig="")
+    @options[:replymethodid] = 1
+    @options[:replydata] = "" 
+    @options[:originator] = orig unless orig==""
+  end
+
+  def no_reply_phone_number(orig="")
+    @options[:replymethodid] = 4
+    @options[:replydata] = "" 
+    @options[:originator] = orig unless orig==""
+  end
+
+  def reply_to_email(email)
+    @options[:replymethodid] = 2
+    @options[:replydata] = email
+    @options[:originator] = ""
+  end
+
+  def reply_to_web_service
+    @options[:replymethodid] = 3
+    @options[:replydata] = ""
+    @options[:originator] = ""
+  end
+
+  def reply_to_url(url)
+    @options[:replymethodid] = 5
+    @options[:replydata] = url
+    @options[:originator] = ""
+  end
+
+  def no_reply_to_shortcode(shortcode)
+    @options[:replymethodid] = 7
+    @options[:replydata] = ""
+    @options[:originator] = shortcode
   end
 
 end
