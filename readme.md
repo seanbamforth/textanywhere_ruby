@@ -62,8 +62,8 @@ returns something like:
     "Description"=>"Transaction OK"
   }, 
   "Destinations"=>{
-    {Destination=>{Number=>+55512345, "Code"=>"1"},
-    {Destination=>{Number=>+55512348, "Code"=>"1"},
+    {Destination=>{Number=>"+55512345", "Code"=>"1"},
+    {Destination=>{Number=>"+55512348", "Code"=>"1"},
   }
 }
 ```
