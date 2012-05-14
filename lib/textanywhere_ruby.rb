@@ -186,10 +186,10 @@ class TextAnywhere_ruby
     hash = {}
 
     response.children.each do |p|
-      if p.children.length > 1
+      if p.children.length > 1 || p.children.children.length > 1
          new_item = format_response(p)
       else 
-        new_item = p.inner_html
+        new_item = p.inner_html 
       end 
 
       if hash.has_key?(p.name) 
@@ -214,6 +214,7 @@ class TextAnywhere_ruby
     trans_text = response.xpath('//Transaction/Description').inner_text()
 
     a = format_response(response.xpath("/*"))
+    puts a
     return a
   end 
 
